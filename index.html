@@ -1,0 +1,2232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanças 2026 • Dia 05 & Dia 20</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- BARRA LATERAL -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="logo">
+                    <h2>Finanças <span id="badge-ano-titulo">2026</span></h2>
+                    <p class="logo-sub">Recebimentos Dias 05 & 20</p>
+                    <div id="sync-status-line" class="sync-status-line offline">
+                        <span class="sync-dot"></span>
+                        <span id="sync-status-text">Conectando ao banco...</span>
+                        <span id="sync-time-tag" class="sync-time-tag"></span>
+                    </div>
+                </div>
+
+                <!-- FILTROS DE PERÍODO -->
+                <div class="menu-grid-mobile">
+                    <div>
+                        <div class="menu-label">ANO</div>
+                        <div class="ano-select-row">
+                            <select id="filtro-ano"></select>
+                            <button type="button" class="btn-add-desc" onclick="editarOuAdicionarAno()"
+                                title="Adicionar novo ano">+ Ano</button>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="menu-label">CICLO</div>
+                        <select id="filtro-ciclo">
+                            <option value="TODOS">Todos os Ciclos</option>
+                            <option value="Dia 05">Dia 05</option>
+                            <option value="Dia 20">Dia 20</option>
+                        </select>
+                    </div>
+
+                    <div class="menu-full-span">
+                        <div class="menu-label">MÊS DE REFERÊNCIA</div>
+                        <select id="filtro-mes">
+                            <option value="TODOS" id="opt-ano-completo">Ano Completo (2026)</option>
+                            <option value="01">Janeiro</option>
+                            <option value="02">Fevereiro</option>
+                            <option value="03">Março</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Maio</option>
+                            <option value="06">Junho</option>
+                            <option value="07">Julho</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11" selected>Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- NOVO LANÇAMENTO -->
+                <div class="sidebar-form-section" id="secao-novo-lancamento">
+                    <div class="menu-label">NOVO LANÇAMENTO</div>
+                    <form id="form-lancamento" class="sidebar-form">
+                        <div class="sidebar-row-2">
+                            <div class="form-group">
+                                <label for="ciclo">Ciclo</label>
+                                <select id="ciclo" required>
+                                    <option value="Dia 05">Dia 05</option>
+                                    <option value="Dia 20">Dia 20</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select id="status">
+                                    <option value="Pendente">Pendente</option>
+                                    <option value="Pago">Pago</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-row-2">
+                            <div class="form-group">
+                                <label for="data">Data Lanç.</label>
+                                <input type="date" id="data" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="vencimento">Vencimento</label>
+                                <input type="date" id="vencimento">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descricao">Descrição</label>
+                            <div class="desc-input-row">
+                                <div class="combo-desc-wrap" id="combo-desc-wrap">
+                                    <input type="text" id="descricao" placeholder="Digite ou escolha..."
+                                        autocomplete="off" required>
+                                    <button type="button" id="btn-combo-toggle" class="btn-combo-toggle"
+                                        title="Abrir lista">▼</button>
+                                    <div id="combo-desc-menu" class="combo-desc-menu hidden"></div>
+                                </div>
+                                <button type="button" class="btn-add-desc" onclick="salvarNovaDescricaoManual()"
+                                    title="Salvar na lista fixa">+ Lista</button>
+                                <button type="button" class="btn-rem-desc" onclick="removerDescricaoManual()"
+                                    title="Remover da lista">✕</button>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-row-2">
+                            <div class="form-group">
+                                <label for="categoria">Categoria</label>
+                                <select id="categoria">
+                                    <option value="Salário / Renda">Salário / Renda</option>
+                                    <option value="Moradia / Casa">Moradia / Casa</option>
+                                    <option value="Veículo / Carro">Veículo / Carro</option>
+                                    <option value="Contas Fixas / Consumo">Contas Fixas / Consumo</option>
+                                    <option value="Cartões de Crédito">Cartões de Crédito</option>
+                                    <option value="Empréstimos / Dívidas">Empréstimos / Dívidas</option>
+                                    <option value="Saúde / Tratamento Dentário">Saúde / Dentário</option>
+                                    <option value="Alimentação / Mercado">Alimentação / Mercado</option>
+                                    <option value="Poupança / Caixinha">Poupança / Caixinha</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo">Tipo</label>
+                                <select id="tipo">
+                                    <option value="despesa">Saída (-)</option>
+                                    <option value="receita">Entrada (+)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="grupo-modo-parcela">
+                            <label for="modo-parcela">Forma de Pagamento</label>
+                            <select id="modo-parcela">
+                                <option value="avista">À vista / Mensal comum</option>
+                                <option value="parcelado">Parcelado (gera meses seguintes)</option>
+                            </select>
+                        </div>
+
+                        <div class="sidebar-row-2 hidden" id="campos-parcelamento">
+                            <div class="form-group">
+                                <label for="parcela-atual">Parcela Atual</label>
+                                <input type="number" id="parcela-atual" min="1" value="1">
+                            </div>
+                            <div class="form-group">
+                                <label for="parcelas-total">Total Parcelas</label>
+                                <input type="number" id="parcelas-total" min="2" value="10">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="valor">Valor (R$)</label>
+                            <input type="number" id="valor" step="0.01" min="0.01" placeholder="0,00"
+                                inputmode="decimal" required>
+                        </div>
+
+                        <button type="submit" class="btn-primary">+ Adicionar Lançamento</button>
+                    </form>
+                </div>
+
+                <!-- RESUMO DO PERÍODO -->
+                <div class="sidebar-chart-section">
+                    <div class="menu-label">RESUMO DO PERÍODO (GRÁFICO)</div>
+                    <div class="sidebar-kpi-bars">
+                        <div class="skpi-item">
+                            <div class="skpi-header">
+                                <span>Receitas</span>
+                                <strong id="total-receitas" class="text-green">R$ 0,00</strong>
+                            </div>
+                            <div class="skpi-track">
+                                <div id="bar-receitas" class="skpi-fill fill-green" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skpi-item">
+                            <div class="skpi-header">
+                                <span>Saídas</span>
+                                <strong id="total-despesas" class="text-red">R$ 0,00</strong>
+                            </div>
+                            <div class="skpi-track">
+                                <div id="bar-despesas" class="skpi-fill fill-red" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skpi-item">
+                            <div class="skpi-header">
+                                <span>Saldo Livre</span>
+                                <strong id="saldo-atual">R$ 0,00</strong>
+                            </div>
+                            <div class="skpi-track">
+                                <div id="bar-saldo" class="skpi-fill fill-accent" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skpi-item">
+                            <div class="skpi-header">
+                                <span>A Pagar (Pendentes)</span>
+                                <strong id="total-pendente" class="text-amber">R$ 0,00</strong>
+                            </div>
+                            <div class="skpi-track">
+                                <div id="bar-pendente" class="skpi-fill fill-amber" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="skpi-item">
+                            <div class="skpi-header">
+                                <span>Saldo na Caixinha</span>
+                                <strong id="kpi-poupanca" class="text-teal">R$ 0,00</strong>
+                            </div>
+                            <div class="skpi-track">
+                                <div id="bar-poupanca" class="skpi-fill fill-teal" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                <button type="button" id="btn-exportar" class="btn-secondary">Exportar CSV</button>
+                <button type="button" id="btn-limpar" class="btn-danger-outline">Zerar Dados</button>
+            </div>
+        </aside>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="main-content">
+            <header class="topbar">
+                <div>
+                    <h1 id="titulo-dashboard">Dashboard Financeiro • 2026</h1>
+                    <p class="subtitle">Controle quinzenal, financiamentos, caixinha e cronograma de contas</p>
+                </div>
+            </header>
+
+            <!-- CARDS QUINZENAIS + CAIXINHA -->
+            <section class="quinzena-grid">
+                <!-- DIA 05 -->
+                <div class="quinzena-card dia-05">
+                    <div class="q-header">
+                        <span class="q-badge badge-05">RECEBIMENTO DIA 05</span>
+                        <span id="saldo-05" class="q-saldo">Sobra: R$ 0,00</span>
+                    </div>
+                    <div class="q-vchart">
+                        <div class="q-vcol">
+                            <span id="qpct-rec-05" class="q-vpct text-green">0%</span>
+                            <div class="q-vtrack">
+                                <div id="qbar-rec-05" class="q-vfill fill-green" style="height: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="q-vcol">
+                            <span id="qpct-desp-05" class="q-vpct text-red">0%</span>
+                            <div class="q-vtrack">
+                                <div id="qbar-desp-05" class="q-vfill fill-red" style="height: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="q-vcol">
+                            <span id="qpct-pend-05" class="q-vpct text-amber">0%</span>
+                            <div class="q-vtrack">
+                                <div id="qbar-pend-05" class="q-vfill fill-amber" style="height: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="q-body">
+                        <div><small>Entradas</small><strong id="rec-05" class="text-green">R$ 0,00</strong></div>
+                        <div><small>Saídas</small><strong id="desp-05" class="text-red">R$ 0,00</strong></div>
+                        <div><small>Pendente</small><strong id="pend-05" class="text-amber">R$ 0,00</strong></div>
+                    </div>
+                </div>
+
+                <!-- DIA 20 -->
+                <div class="quinzena-card dia-20">
+                    <div class="q-header">
+                        <span class="q-badge badge-20">RECEBIMENTO DIA 20</span>
+                        <span id="saldo-20" class="q-saldo">Sobra: R$ 0,00</span>
+                    </div>
+                    <div class="q-vchart">
+                        <div class="q-vcol">
+                            <span id="qpct-rec-20" class="q-vpct text-green">0%</span>
+                            <div class="q-vtrack">
+                                <div id="qbar-rec-20" class="q-vfill fill-green" style="height: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="q-vcol">
+                            <span id="qpct-desp-20" class="q-vpct text-red">0%</span>
+                            <div class="q-vtrack">
+                                <div id="qbar-desp-20" class="q-vfill fill-red" style="height: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="q-vcol">
+                            <span id="qpct-pend-20" class="q-vpct text-amber">0%</span>
+                            <div class="q-vtrack">
+                                <div id="qbar-pend-20" class="q-vfill fill-amber" style="height: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="q-body">
+                        <div><small>Entradas</small><strong id="rec-20" class="text-green">R$ 0,00</strong></div>
+                        <div><small>Saídas</small><strong id="desp-20" class="text-red">R$ 0,00</strong></div>
+                        <div><small>Pendente</small><strong id="pend-20" class="text-amber">R$ 0,00</strong></div>
+                    </div>
+                </div>
+
+                <!-- CAIXINHA POUPANÇA -->
+                <div class="quinzena-card caixinha-card">
+                    <div class="q-header">
+                        <span class="q-badge badge-poupanca">CAIXINHA / POUPANÇA</span>
+                        <button type="button" class="btn-edit-small" onclick="editarMetaPoupanca()">Meta</button>
+                    </div>
+                    <div class="caixinha-saldo-row">
+                        <div>
+                            <small>Acumulado</small>
+                            <strong id="caixinha-saldo-texto" class="caixinha-valor-principal">R$ 0,00</strong>
+                        </div>
+                        <div style="text-align: right;">
+                            <small>Meta</small>
+                            <strong id="caixinha-meta-texto">R$ 5.000,00</strong>
+                        </div>
+                    </div>
+                    <div class="caixinha-progress">
+                        <div class="bar-track">
+                            <div id="caixinha-barra" class="bar-fill" style="width: 0%"></div>
+                        </div>
+                        <small id="caixinha-percentual">0.0% da meta atingida</small>
+                    </div>
+                    <div class="caixinha-sugestao">
+                        <div>
+                            <span id="caixinha-sugestao-titulo" class="sugestao-titulo">Sugestão para o período:</span>
+                            <strong id="caixinha-sugestao-valor" class="sugestao-valor">R$ 0,00</strong>
+                            <span id="caixinha-sugestao-detalhe" class="sugestao-detalhe">20% da sobra livre</span>
+                        </div>
+                        <button type="button" id="btn-usar-sugestao" class="btn-usar-sugestao"
+                            onclick="aplicarSugestaoPoupanca()">Usar</button>
+                    </div>
+                    <div class="caixinha-form">
+                        <select id="poupanca-ciclo">
+                            <option value="Dia 05">Dia 05</option>
+                            <option value="Dia 20">Dia 20</option>
+                        </select>
+                        <input type="number" id="poupanca-valor" step="0.01" min="0.01" placeholder="Valor R$"
+                            inputmode="decimal">
+                        <button type="button" class="btn-guardar"
+                            onclick="movimentarPoupanca('guardar')">Guardar</button>
+                        <button type="button" class="btn-resgatar"
+                            onclick="movimentarPoupanca('resgatar')">Resgatar</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FINANCIAMENTOS E CONTRATOS -->
+            <section class="fin-section">
+                <div class="fin-section-header">
+                    <h3>Financiamentos & Contratos Fixos</h3>
+                    <button type="button" class="btn-secondary" onclick="abrirModalNovoContrato()">+ Novo
+                        Financiamento</button>
+                </div>
+                <div id="grid-financiamentos" class="fin-grid"></div>
+            </section>
+
+            <!-- CRONOGRAMA & SAÍDAS POR CATEGORIA -->
+            <section class="content-split">
+                <div class="card">
+                    <div class="table-header">
+                        <div class="table-title-group">
+                            <h3>Cronograma de Contas a Pagar</h3>
+                            <button type="button" class="btn-copy-month" onclick="abrirModalCopiarMes()">Copiar para
+                                Próximo Mês</button>
+                        </div>
+                        <div class="table-filters">
+                            <select id="filtro-descricao">
+                                <option value="TODAS">Todas as Descrições</option>
+                            </select>
+                            <input type="text" id="busca" placeholder="Pesquisar conta...">
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Ciclo</th>
+                                    <th>Data</th>
+                                    <th>Venc.</th>
+                                    <th>Descrição</th>
+                                    <th class="col-categoria">Categoria</th>
+                                    <th>Status</th>
+                                    <th>Valor</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabela-corpo"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card chart-section">
+                    <h3>Saídas por Categoria</h3>
+                    <div id="grafico-categorias" class="bars-container"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- BOTÃO FLUTUANTE MOBILE -->
+    <button type="button" class="fab-mobile"
+        onclick="document.getElementById('secao-novo-lancamento').scrollIntoView({ behavior: 'smooth' })">+
+        Lançar</button>
+
+    <!-- MODAL FINANCIAMENTO / CONTRATO -->
+    <div id="modal-contrato" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3 id="modal-titulo">Configurar Financiamento</h3>
+            <form id="form-contrato" class="sidebar-form">
+                <input type="hidden" id="contrato-id">
+                <div class="form-group">
+                    <label for="contrato-nome">Nome do Contrato / Financiamento</label>
+                    <input type="text" id="contrato-nome" required>
+                </div>
+                <div class="sidebar-row-2">
+                    <div class="form-group">
+                        <label for="contrato-categoria">Categoria</label>
+                        <select id="contrato-categoria">
+                            <option value="Moradia / Casa">Moradia / Casa</option>
+                            <option value="Veículo / Carro">Veículo / Carro</option>
+                            <option value="Saúde / Tratamento Dentário">Saúde / Dentário</option>
+                            <option value="Empréstimos / Dívidas">Empréstimos / Dívidas</option>
+                            <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="contrato-cor">Cor do Card</label>
+                        <input type="color" id="contrato-cor" value="#3b82f6" style="height: 40px; padding: 3px;">
+                    </div>
+                </div>
+                <div class="sidebar-row-2">
+                    <div class="form-group">
+                        <label for="contrato-valor-05">Valor Dia 05 (R$)</label>
+                        <input type="number" id="contrato-valor-05" step="0.01" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="contrato-valor-20">Valor Dia 20 (R$)</label>
+                        <input type="number" id="contrato-valor-20" step="0.01" min="0" value="0">
+                    </div>
+                </div>
+                <div class="sidebar-row-2">
+                    <div class="form-group">
+                        <label for="contrato-pagas">Parcelas Pagas</label>
+                        <input type="number" id="contrato-pagas" min="0" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="contrato-total">Total de Parcelas</label>
+                        <input type="number" id="contrato-total" min="1" value="12">
+                    </div>
+                </div>
+                <div class="modal-actions" style="margin-top: 8px;">
+                    <button type="button" class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Contrato</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL COPIAR MÊS -->
+    <div id="modal-copiar-mes" class="modal-overlay hidden">
+        <div class="modal-box">
+            <h3>Copiar Lançamentos para Outro Mês</h3>
+            <form id="form-copiar-mes" class="sidebar-form">
+                <div class="sidebar-row-2">
+                    <div class="form-group">
+                        <label for="copia-ano-origem">Ano Origem</label>
+                        <select id="copia-ano-origem"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="copia-mes-origem">Mês Origem</label>
+                        <select id="copia-mes-origem">
+                            <option value="01">Janeiro</option>
+                            <option value="02">Fevereiro</option>
+                            <option value="03">Março</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Maio</option>
+                            <option value="06">Junho</option>
+                            <option value="07">Julho</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sidebar-row-2">
+                    <div class="form-group">
+                        <label for="copia-ano-destino">Ano Destino</label>
+                        <select id="copia-ano-destino"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="copia-mes-destino">Mês Destino</label>
+                        <select id="copia-mes-destino">
+                            <option value="01">Janeiro</option>
+                            <option value="02">Fevereiro</option>
+                            <option value="03">Março</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Maio</option>
+                            <option value="06">Junho</option>
+                            <option value="07">Julho</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="sidebar-row-2">
+                    <div class="form-group">
+                        <label for="copia-ciclo">Ciclo</label>
+                        <select id="copia-ciclo">
+                            <option value="TODOS">Todos os Ciclos</option>
+                            <option value="Dia 05">Apenas Dia 05</option>
+                            <option value="Dia 20">Apenas Dia 20</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="copia-status">Status no Destino</label>
+                        <select id="copia-status">
+                            <option value="PENDENTE">Marcar como Pendente</option>
+                            <option value="MANTER">Manter Status Original</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-actions" style="margin-top: 8px;">
+                    <button type="button" class="btn-cancel" onclick="fecharModalCopiarMes()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Copiar Agora</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        /* =========================================================
+           FIREBASE REALTIME DATABASE (SYNC REST AUTOMÁTICO)
+           ========================================================= */
+        const FIREBASE_DB_URL = "https://controle-financeiro-2875a-default-rtdb.firebaseio.com/dados.json";
+
+        let salvandoAgora = false;
+        let pendenteSalvar = false;
+        let ultimaSincronizacao = Number(localStorage.getItem('ultima_sync_v5')) || 0;
+        let ultimaVersaoRemota = Number(localStorage.getItem('versao_remota_v5')) || 0;
+
+        function formatarHoraSync(ts) {
+            if (!ts) return '';
+            const d = new Date(ts);
+            const h = String(d.getHours()).padStart(2, '0');
+            const m = String(d.getMinutes()).padStart(2, '0');
+            const s = String(d.getSeconds()).padStart(2, '0');
+            return `• ${h}:${m}:${s}`;
+        }
+
+        function atualizarBadgeBanco({ online = navigator.onLine, sincronizado = false, salvando = false, erro = '' } = {}) {
+            const box = document.getElementById('sync-status-line');
+            const txt = document.getElementById('sync-status-text');
+            const tag = document.getElementById('sync-time-tag');
+            if (!box || !txt) return;
+
+            box.classList.remove('online', 'sincronizado', 'saving', 'offline', 'erro');
+
+            if (erro) {
+                box.classList.add('erro');
+                txt.textContent = `Banco Erro • ${erro}`;
+            } else if (!online) {
+                box.classList.add('offline');
+                txt.textContent = 'Offline • Salvo no aparelho';
+            } else if (salvando) {
+                box.classList.add('saving');
+                txt.textContent = 'Salvando no banco...';
+            } else if (sincronizado) {
+                box.classList.add('sincronizado');
+                txt.textContent = 'Banco Online • Sincronizado';
+            } else {
+                box.classList.add('online');
+                txt.textContent = 'Banco Online';
+            }
+
+            if (tag) {
+                tag.textContent = ultimaSincronizacao ? formatarHoraSync(ultimaSincronizacao) : '';
+            }
+        }
+
+        /* =========================================================
+           DADOS INICIAIS E VARIÁVEIS DO SISTEMA
+           ========================================================= */
+        const descricoesPadrao = [
+            "PAGAMENTO SALÁRIO DIA 05", "PAGAMENTO SALÁRIO DIA 20",
+            "AQUISIÇÃO CASA PROPRIA", "CONTA DE AGUA", "CONTA DE LUZ", "CONTA DE INTERNET",
+            "CARTÃO PIC PAY", "CARTÃO MERCADO PAGO", "CARTÃO NUBANK", "CARTÃO INTER",
+            "CONTA VIVO CELULAR", "CONTA CLARO CELULAR",
+            "SALDO POSITIVO QUE SOBROU DE UM MÊS PARA O OUTRO", "TRATAMENTO DENTARIO",
+            "EMPRESTIMO 99", "DENIS", "MEI SARA", "COMPRA MERCADO LIVRE",
+            "LICENCIAMENTO CARRO", "CARTÃO CAIXA SIM", "CARTÃO ATACADÃO",
+            "DEBITOS VEICULO", "GASOLINA", "FINANCIAMENTO CARRO",
+            "CARTÃO BANCO DO BRASIL", "EMPRESTIMO MERCADO LIVRE",
+            "CONTA BANCO DO BRASIL", "PAI", "CARTÃO CARREFOUR", "CARTÃO NUBANK SARA"
+        ];
+
+        const dadosExemplo = [
+            { id: 1, ciclo: 'Dia 05', data: '2026-11-05', vencimento: '2026-11-05', descricao: 'PAGAMENTO SALÁRIO DIA 05', categoria: 'Salário / Renda', tipo: 'receita', status: 'Pago', valor: 2750.00 },
+            { id: 2, ciclo: 'Dia 05', data: '2026-11-05', vencimento: '2026-11-05', descricao: 'AQUISIÇÃO CASA PROPRIA', categoria: 'Moradia / Casa', tipo: 'despesa', status: 'Pago', valor: 725.00 },
+            { id: 3, ciclo: 'Dia 05', data: '2026-11-05', vencimento: '2026-11-05', descricao: 'FINANCIAMENTO CARRO', categoria: 'Veículo / Carro', tipo: 'despesa', status: 'Pago', valor: 445.00 },
+            { id: 4, ciclo: 'Dia 05', data: '2026-11-08', vencimento: '2026-11-10', descricao: 'CONTA DE AGUA', categoria: 'Contas Fixas / Consumo', tipo: 'despesa', status: 'Pago', valor: 120.00 },
+            { id: 5, ciclo: 'Dia 20', data: '2026-11-20', vencimento: '2026-11-20', descricao: 'PAGAMENTO SALÁRIO DIA 20', categoria: 'Salário / Renda', tipo: 'receita', status: 'Pendente', valor: 2750.00 },
+            { id: 6, ciclo: 'Dia 20', data: '2026-11-20', vencimento: '2026-11-20', descricao: 'AQUISIÇÃO CASA PROPRIA', categoria: 'Moradia / Casa', tipo: 'despesa', status: 'Pendente', valor: 725.00 },
+            { id: 7, ciclo: 'Dia 20', data: '2026-11-20', vencimento: '2026-11-20', descricao: 'FINANCIAMENTO CARRO', categoria: 'Veículo / Carro', tipo: 'despesa', status: 'Pendente', valor: 445.00 },
+            { id: 8, ciclo: 'Dia 20', data: '2026-11-20', vencimento: '2026-11-25', descricao: 'TRATAMENTO DENTARIO', categoria: 'Saúde / Tratamento Dentário', tipo: 'despesa', status: 'Pendente', valor: 65.00 }
+        ];
+
+        const contratosExemplo = [
+            { id: 'casa', titulo: 'AQUISIÇÃO CASA PROPRIA', categoria: 'Moradia / Casa', cor: '#3b82f6', valorDia05: 725.00, valorDia20: 725.00, parcelasPagas: 42, totalParcelas: 360 },
+            { id: 'carro', titulo: 'FINANCIAMENTO CARRO', categoria: 'Veículo / Carro', cor: '#8b5cf6', valorDia05: 445.00, valorDia20: 445.00, parcelasPagas: 24, totalParcelas: 48 },
+            { id: 'dental', titulo: 'TRATAMENTO DENTARIO', categoria: 'Saúde / Tratamento Dentário', cor: '#10b981', valorDia05: 0.00, valorDia20: 65.00, parcelasPagas: 11, totalParcelas: 12 }
+        ];
+
+        const poupancaExemplo = { saldoTotal: 0.00, meta: 5000.00 };
+        const anosPadrao = ['2026', '2027', '2028', '2029', '2030', '2031', '2032', '2033', '2034', '2035'];
+
+        const lancamentosSalvos = localStorage.getItem('gastos_2026_v5');
+        let lancamentos = lancamentosSalvos !== null ? JSON.parse(lancamentosSalvos) : dadosExemplo;
+        let listaDescricoes = JSON.parse(localStorage.getItem('descricoes_2026_v5')) || descricoesPadrao;
+        let contratos = JSON.parse(localStorage.getItem('contratos_2026_v5')) || contratosExemplo;
+        let parcelados = JSON.parse(localStorage.getItem('parcelados_2026_v5')) || [];
+        let poupanca = JSON.parse(localStorage.getItem('poupanca_2026_v5')) || poupancaExemplo;
+        let listaAnos = JSON.parse(localStorage.getItem('anos_financas_v5')) || anosPadrao;
+        let anoAtivo = localStorage.getItem('ano_ativo_v5') || '2026';
+        let idValorEditando = null;
+        let valorSugeridoAtual = 0;
+
+        function normalizarParcelados() {
+            parcelados.forEach(p => {
+                if (typeof p.parcelaAtual !== 'number') {
+                    const base = typeof p.parcelasPagas === 'number' ? p.parcelasPagas + 1 : 1;
+                    p.parcelaAtual = Math.min(p.totalParcelas, Math.max(1, base));
+                    p.quitado = typeof p.parcelasPagas === 'number' && p.parcelasPagas >= p.totalParcelas;
+                }
+            });
+        }
+        normalizarParcelados();
+
+        const form = document.getElementById('form-lancamento');
+        const tabelaCorpo = document.getElementById('tabela-corpo');
+        const filtroAno = document.getElementById('filtro-ano');
+        const filtroMes = document.getElementById('filtro-mes');
+        const filtroCiclo = document.getElementById('filtro-ciclo');
+        const filtroDescricao = document.getElementById('filtro-descricao');
+        const campoBusca = document.getElementById('busca');
+
+        const selectTipo = document.getElementById('tipo');
+        const selectModoParcela = document.getElementById('modo-parcela');
+        const grupoModoParcela = document.getElementById('grupo-modo-parcela');
+        const camposParcelamento = document.getElementById('campos-parcelamento');
+
+        function atualizarVisibilidadeParcelamento() {
+            const ehDespesa = selectTipo.value === 'despesa';
+            grupoModoParcela.classList.toggle('hidden', !ehDespesa);
+            if (!ehDespesa) {
+                selectModoParcela.value = 'avista';
+            }
+            const ehParcelado = ehDespesa && selectModoParcela.value === 'parcelado';
+            camposParcelamento.classList.toggle('hidden', !ehParcelado);
+        }
+
+        selectTipo.addEventListener('change', atualizarVisibilidadeParcelamento);
+        selectModoParcela.addEventListener('change', atualizarVisibilidadeParcelamento);
+
+        function renderizarAnos() {
+            lancamentos.forEach(item => {
+                const anoItem = item.data.split('-')[0];
+                if (anoItem && !listaAnos.includes(anoItem)) {
+                    listaAnos.push(anoItem);
+                }
+            });
+            if (!listaAnos.includes(anoAtivo)) {
+                listaAnos.push(anoAtivo);
+            }
+            listaAnos.sort((a, b) => Number(a) - Number(b));
+
+            const selectsAno = [
+                filtroAno,
+                document.getElementById('copia-ano-origem'),
+                document.getElementById('copia-ano-destino')
+            ];
+
+            selectsAno.forEach(sel => {
+                if (!sel) return;
+                const valorPrevio = sel.value;
+                sel.innerHTML = '';
+                listaAnos.forEach(ano => {
+                    const opt = document.createElement('option');
+                    opt.value = ano;
+                    opt.textContent = ano;
+                    sel.appendChild(opt);
+                });
+                if (listaAnos.includes(valorPrevio)) {
+                    sel.value = valorPrevio;
+                }
+            });
+
+            filtroAno.value = anoAtivo;
+            atualizarTitulosAno();
+        }
+
+        function atualizarTitulosAno() {
+            const ano = filtroAno.value || '2026';
+            document.getElementById('badge-ano-titulo').textContent = ano;
+            document.getElementById('opt-ano-completo').textContent = `Ano Completo (${ano})`;
+            document.getElementById('titulo-dashboard').textContent = `Dashboard Financeiro • ${ano}`;
+            document.title = `Finanças ${ano} • Dia 05 & Dia 20`;
+        }
+
+        window.editarOuAdicionarAno = function () {
+            const anoAtual = filtroAno.value;
+            const entrada = prompt(
+                `Ano selecionado: ${anoAtual}\nDigite o novo ano desejado (ex: 2027, 2036):`,
+                String(Number(anoAtual) + 1)
+            );
+            if (!entrada) return;
+
+            const novoAno = entrada.trim();
+            if (!/^\d{4}$/.test(novoAno)) {
+                alert('Informe um ano válido com 4 dígitos (ex: 2027).');
+                return;
+            }
+
+            if (!listaAnos.includes(novoAno)) {
+                listaAnos.push(novoAno);
+            }
+            anoAtivo = novoAno;
+            salvarDados();
+            renderizarAnos();
+            sincronizarDataFormulario();
+            atualizarInterface();
+        };
+
+        function sincronizarDataFormulario() {
+            const ano = filtroAno.value || '2026';
+            const mes = filtroMes.value !== 'TODOS' ? filtroMes.value : '11';
+            const dia = document.getElementById('ciclo').value === 'Dia 05' ? '05' : '20';
+            const dataPadrao = `${ano}-${mes}-${dia}`;
+            document.getElementById('data').value = dataPadrao;
+            const inputVenc = document.getElementById('vencimento');
+            if (inputVenc) {
+                inputVenc.value = dataPadrao;
+            }
+        }
+
+        renderizarAnos();
+        sincronizarDataFormulario();
+
+        function formatarMoeda(valor) {
+            return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+
+        function formatarDataCurta(dataISO) {
+            if (!dataISO) return '--/--';
+            const [, mes, dia] = dataISO.split('-');
+            return `${dia}/${mes}`;
+        }
+
+        function obterDataHojeISO() {
+            const hoje = new Date();
+            const ano = hoje.getFullYear();
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            return `${ano}-${mes}-${dia}`;
+        }
+
+        function estaVencidoPendente(item) {
+            if (item.status !== 'Pendente') return false;
+            const dataPrazo = item.vencimento || item.data;
+            if (!dataPrazo) return false;
+            return dataPrazo < obterDataHojeISO();
+        }
+
+        function somarMesesData(dataISO, mesesAdicionar) {
+            const [anoStr, mesStr, diaStr] = dataISO.split('-');
+            let ano = parseInt(anoStr, 10);
+            let mes = parseInt(mesStr, 10) + mesesAdicionar;
+            while (mes > 12) {
+                mes -= 12;
+                ano += 1;
+            }
+            const ultimoDia = new Date(ano, mes, 0).getDate();
+            const dia = Math.min(parseInt(diaStr, 10), ultimoDia);
+            return `${String(ano)}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+        }
+
+        function salvarLocalStorage() {
+            localStorage.setItem('descricoes_2026_v5', JSON.stringify(listaDescricoes));
+            localStorage.setItem('gastos_2026_v5', JSON.stringify(lancamentos));
+            localStorage.setItem('contratos_2026_v5', JSON.stringify(contratos));
+            localStorage.setItem('parcelados_2026_v5', JSON.stringify(parcelados));
+            localStorage.setItem('poupanca_2026_v5', JSON.stringify(poupanca));
+            localStorage.setItem('anos_financas_v5', JSON.stringify(listaAnos));
+            localStorage.setItem('ano_ativo_v5', anoAtivo);
+            if (ultimaSincronizacao) {
+                localStorage.setItem('ultima_sync_v5', String(ultimaSincronizacao));
+            }
+            if (ultimaVersaoRemota) {
+                localStorage.setItem('versao_remota_v5', String(ultimaVersaoRemota));
+            }
+        }
+
+        async function enviarParaBanco() {
+            if (!navigator.onLine) {
+                pendenteSalvar = true;
+                atualizarBadgeBanco({ online: false });
+                return;
+            }
+
+            if (salvandoAgora) {
+                pendenteSalvar = true;
+                return;
+            }
+
+            salvandoAgora = true;
+            pendenteSalvar = false;
+            const agora = Date.now();
+            atualizarBadgeBanco({ online: true, salvando: true });
+
+            const payload = {
+                lancamentos: lancamentos || [],
+                listaDescricoes: listaDescricoes || descricoesPadrao,
+                contratos: contratos || [],
+                parcelados: parcelados || [],
+                poupanca: poupanca || poupancaExemplo,
+                listaAnos: listaAnos || anosPadrao,
+                anoAtivo: anoAtivo || '2026',
+                atualizadoEm: agora
+            };
+
+            try {
+                const resp = await fetch(FIREBASE_DB_URL, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!resp.ok) {
+                    const msgErro = resp.status === 401 || resp.status === 403
+                        ? 'Regras bloqueadas (401)'
+                        : `HTTP ${resp.status}`;
+                    atualizarBadgeBanco({ online: true, erro: msgErro });
+                    return;
+                }
+
+                ultimaSincronizacao = agora;
+                ultimaVersaoRemota = agora;
+                salvarLocalStorage();
+                atualizarBadgeBanco({ online: true, sincronizado: true });
+            } catch (err) {
+                console.error('Erro ao salvar no Firebase:', err);
+                atualizarBadgeBanco({ online: false, erro: 'Sem conexão' });
+            } finally {
+                salvandoAgora = false;
+                if (pendenteSalvar) {
+                    enviarParaBanco();
+                }
+            }
+        }
+
+        async function carregarDoBanco(inicial = false) {
+            if (!navigator.onLine || salvandoAgora || pendenteSalvar) return;
+
+            try {
+                const resp = await fetch(`${FIREBASE_DB_URL}?t=${Date.now()}`, {
+                    cache: 'no-store'
+                });
+
+                if (!resp.ok) {
+                    const msgErro = resp.status === 401 || resp.status === 403
+                        ? 'Regras bloqueadas (401)'
+                        : `HTTP ${resp.status}`;
+                    atualizarBadgeBanco({ online: true, erro: msgErro });
+                    return;
+                }
+
+                const val = await resp.json();
+
+                if (!val) {
+                    if (inicial && lancamentos.length > 0) {
+                        await enviarParaBanco();
+                    } else {
+                        atualizarBadgeBanco({ online: true, sincronizado: true });
+                    }
+                    return;
+                }
+
+                const versaoServidor = Number(val.atualizadoEm) || 0;
+                if (!inicial && versaoServidor <= ultimaVersaoRemota) {
+                    atualizarBadgeBanco({ online: true, sincronizado: true });
+                    return;
+                }
+
+                if (idValorEditando !== null) return;
+
+                lancamentos = Array.isArray(val.lancamentos) ? val.lancamentos : [];
+                listaDescricoes = Array.isArray(val.listaDescricoes) && val.listaDescricoes.length > 0
+                    ? val.listaDescricoes
+                    : descricoesPadrao;
+                contratos = Array.isArray(val.contratos) ? val.contratos : contratosExemplo;
+                parcelados = Array.isArray(val.parcelados) ? val.parcelados : [];
+                poupanca = val.poupanca && typeof val.poupanca.saldoTotal === 'number'
+                    ? val.poupanca
+                    : poupancaExemplo;
+                listaAnos = Array.isArray(val.listaAnos) && val.listaAnos.length > 0
+                    ? val.listaAnos
+                    : anosPadrao;
+                if (val.anoAtivo) anoAtivo = String(val.anoAtivo);
+
+                ultimaVersaoRemota = versaoServidor || Date.now();
+                ultimaSincronizacao = ultimaVersaoRemota;
+
+                normalizarParcelados();
+                salvarLocalStorage();
+
+                atualizarBadgeBanco({ online: true, sincronizado: true });
+                renderizarAnos();
+                renderizarListaDescricoes();
+                renderizarPoupanca();
+                renderizarContratos();
+                atualizarInterface();
+            } catch (err) {
+                console.error('Erro ao ler Firebase:', err);
+                atualizarBadgeBanco({ online: false });
+            }
+        }
+
+        function salvarDados() {
+            salvarLocalStorage();
+            enviarParaBanco();
+        }
+
+        window.addEventListener('online', () => {
+            if (pendenteSalvar) enviarParaBanco();
+            else carregarDoBanco(false);
+        });
+        window.addEventListener('offline', () => atualizarBadgeBanco({ online: false }));
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                carregarDoBanco(false);
+            }
+        });
+
+        setInterval(() => {
+            if (document.visibilityState === 'visible') {
+                carregarDoBanco(false);
+            }
+        }, 3000);
+
+        /* =========================================================
+           SELETOR DE DESCRIÇÕES
+           ========================================================= */
+        const inputDescricao = document.getElementById('descricao');
+        const comboDescWrap = document.getElementById('combo-desc-wrap');
+        const comboDescMenu = document.getElementById('combo-desc-menu');
+        const btnComboToggle = document.getElementById('btn-combo-toggle');
+
+        function popularMenuDescricoes(filtro = '') {
+            const termo = filtro.trim().toUpperCase();
+            const ordenadas = [...listaDescricoes].sort((a, b) => a.localeCompare(b));
+            const filtradas = termo
+                ? ordenadas.filter(d => d.toUpperCase().includes(termo))
+                : ordenadas;
+
+            comboDescMenu.innerHTML = '';
+
+            if (filtradas.length === 0) {
+                comboDescMenu.innerHTML = '<div class="combo-desc-empty">Nenhum item encontrado (clique em + Lista para salvar)</div>';
+                return;
+            }
+
+            filtradas.forEach(desc => {
+                const btnItem = document.createElement('button');
+                btnItem.type = 'button';
+                btnItem.className = 'combo-desc-item';
+                if (desc === inputDescricao.value.trim().toUpperCase()) {
+                    btnItem.classList.add('ativo');
+                }
+                btnItem.textContent = desc;
+                btnItem.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    inputDescricao.value = desc;
+                    fecharMenuDescricoes();
+                });
+                comboDescMenu.appendChild(btnItem);
+            });
+        }
+
+        function abrirMenuDescricoes(mostrarTodas = false) {
+            popularMenuDescricoes(mostrarTodas ? '' : inputDescricao.value);
+            comboDescMenu.classList.remove('hidden');
+        }
+
+        function fecharMenuDescricoes() {
+            comboDescMenu.classList.add('hidden');
+        }
+
+        inputDescricao.addEventListener('focus', () => {
+            abrirMenuDescricoes(true);
+        });
+
+        inputDescricao.addEventListener('input', () => {
+            abrirMenuDescricoes(false);
+        });
+
+        btnComboToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            if (comboDescMenu.classList.contains('hidden')) {
+                abrirMenuDescricoes(true);
+            } else {
+                fecharMenuDescricoes();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!comboDescWrap.contains(e.target)) {
+                fecharMenuDescricoes();
+            }
+        });
+
+        function renderizarListaDescricoes() {
+            const selectFiltro = document.getElementById('filtro-descricao');
+            const valorSelecionadoAtual = selectFiltro.value;
+            const ordenadas = [...listaDescricoes].sort((a, b) => a.localeCompare(b));
+
+            selectFiltro.innerHTML = '<option value="TODAS">Todas as Descrições</option>';
+
+            ordenadas.forEach(desc => {
+                const optFiltro = document.createElement('option');
+                optFiltro.value = desc;
+                optFiltro.textContent = desc;
+                selectFiltro.appendChild(optFiltro);
+            });
+
+            if (ordenadas.includes(valorSelecionadoAtual)) {
+                selectFiltro.value = valorSelecionadoAtual;
+            }
+
+            if (!comboDescMenu.classList.contains('hidden')) {
+                popularMenuDescricoes('');
+            }
+        }
+
+        window.salvarNovaDescricaoManual = function () {
+            const novaDesc = inputDescricao.value.trim().toUpperCase();
+            if (!novaDesc) return;
+            if (!listaDescricoes.includes(novaDesc)) {
+                listaDescricoes.push(novaDesc);
+                salvarDados();
+                renderizarListaDescricoes();
+            }
+            inputDescricao.value = novaDesc;
+        };
+
+        window.removerDescricaoManual = function () {
+            const descAlvo = inputDescricao.value.trim().toUpperCase();
+            const indice = listaDescricoes.indexOf(descAlvo);
+            if (indice !== -1 && confirm(`Remover "${descAlvo}" da lista fixa?`)) {
+                listaDescricoes.splice(indice, 1);
+                salvarDados();
+                renderizarListaDescricoes();
+                inputDescricao.value = '';
+            }
+        };
+
+        function renderizarPoupanca() {
+            const percentual = poupanca.meta > 0
+                ? Math.min(100, (poupanca.saldoTotal / poupanca.meta) * 100).toFixed(1)
+                : '0.0';
+
+            document.getElementById('kpi-poupanca').textContent = formatarMoeda(poupanca.saldoTotal);
+            document.getElementById('bar-poupanca').style.width = `${percentual}%`;
+            document.getElementById('caixinha-saldo-texto').textContent = formatarMoeda(poupanca.saldoTotal);
+            document.getElementById('caixinha-meta-texto').textContent = formatarMoeda(poupanca.meta);
+            document.getElementById('caixinha-barra').style.width = `${percentual}%`;
+            document.getElementById('caixinha-percentual').textContent = `${percentual}% da meta atingida`;
+        }
+
+        function atualizarSugestaoPoupanca(doPeriodo) {
+            const nomesMeses = {
+                '01': 'Janeiro', '02': 'Fevereiro', '03': 'Março', '04': 'Abril',
+                '05': 'Maio', '06': 'Junho', '07': 'Julho', '08': 'Agosto',
+                '09': 'Setembro', '10': 'Outubro', '11': 'Novembro', '12': 'Dezembro'
+            };
+
+            const mesSel = filtroMes.value;
+            const nomePeriodo = mesSel === 'TODOS' ? `o ano (${filtroAno.value})` : nomesMeses[mesSel];
+
+            let receitasPeriodo = 0;
+            let despesasSemCaixinha = 0;
+            let jaGuardadoNoPeriodo = 0;
+
+            doPeriodo.forEach(item => {
+                if (item.categoria === 'Poupança / Caixinha') {
+                    if (item.tipo === 'despesa') jaGuardadoNoPeriodo += item.valor;
+                } else if (item.tipo === 'receita') {
+                    receitasPeriodo += item.valor;
+                } else {
+                    despesasSemCaixinha += item.valor;
+                }
+            });
+
+            const sobraAntesCaixinha = receitasPeriodo - despesasSemCaixinha;
+            const faltaParaMeta = Math.max(0, poupanca.meta - poupanca.saldoTotal);
+
+            const alvoIdeal = sobraAntesCaixinha > 0 ? sobraAntesCaixinha * 0.20 : 0;
+            const restanteParaGuardarNoMes = Math.max(0, alvoIdeal - jaGuardadoNoPeriodo);
+            const sobraRealDisponivel = Math.max(0, sobraAntesCaixinha - jaGuardadoNoPeriodo);
+
+            let sugestao = Math.min(restanteParaGuardarNoMes, sobraRealDisponivel);
+            if (faltaParaMeta > 0) {
+                sugestao = Math.min(sugestao, faltaParaMeta);
+            } else {
+                sugestao = 0;
+            }
+
+            valorSugeridoAtual = Number(sugestao.toFixed(2));
+
+            const elTitulo = document.getElementById('caixinha-sugestao-titulo');
+            const elValor = document.getElementById('caixinha-sugestao-valor');
+            const elDetalhe = document.getElementById('caixinha-sugestao-detalhe');
+            const btnAplicar = document.getElementById('btn-usar-sugestao');
+
+            elTitulo.textContent = mesSel === 'TODOS'
+                ? 'Sugestão para o período:'
+                : `Sugestão para ${nomePeriodo}:`;
+
+            if (faltaParaMeta <= 0 && poupanca.meta > 0) {
+                elValor.textContent = 'Meta atingida!';
+                elDetalhe.textContent = 'Você já alcançou 100% da meta definida.';
+                btnAplicar.style.display = 'none';
+            } else if (sobraRealDisponivel <= 0) {
+                elValor.textContent = formatarMoeda(0);
+                elDetalhe.textContent = 'Sem sobra livre disponível neste período.';
+                btnAplicar.style.display = 'none';
+            } else if (valorSugeridoAtual <= 0 && jaGuardadoNoPeriodo > 0) {
+                elValor.textContent = 'Concluído!';
+                elDetalhe.textContent = `Você já guardou ${formatarMoeda(jaGuardadoNoPeriodo)} em ${nomePeriodo}.`;
+                btnAplicar.style.display = 'none';
+            } else {
+                elValor.textContent = formatarMoeda(valorSugeridoAtual);
+                elDetalhe.textContent = `20% da sobra (${formatarMoeda(sobraAntesCaixinha)}) • Falta ${formatarMoeda(faltaParaMeta)} p/ meta`;
+                btnAplicar.style.display = 'inline-flex';
+            }
+        }
+
+        window.aplicarSugestaoPoupanca = function () {
+            if (valorSugeridoAtual <= 0) return;
+            const inputValor = document.getElementById('poupanca-valor');
+            inputValor.value = valorSugeridoAtual.toFixed(2);
+            inputValor.focus();
+        };
+
+        window.movimentarPoupanca = function (acao) {
+            const inputValor = document.getElementById('poupanca-valor');
+            const cicloEscolhido = document.getElementById('poupanca-ciclo').value;
+            const valor = parseFloat(inputValor.value);
+            if (!valor || valor <= 0) return;
+
+            const anoAtual = filtroAno.value || '2026';
+            const mesAtual = filtroMes.value !== 'TODOS' ? filtroMes.value : '11';
+            const diaNum = cicloEscolhido === 'Dia 05' ? '05' : '20';
+            const dataLanc = `${anoAtual}-${mesAtual}-${diaNum}`;
+
+            if (acao === 'guardar') {
+                poupanca.saldoTotal += valor;
+                lancamentos.push({
+                    id: Date.now(),
+                    ciclo: cicloEscolhido,
+                    data: dataLanc,
+                    vencimento: dataLanc,
+                    descricao: 'DEPÓSITO CAIXINHA POUPANÇA',
+                    categoria: 'Poupança / Caixinha',
+                    tipo: 'despesa',
+                    status: 'Pago',
+                    valor: valor
+                });
+            } else if (acao === 'resgatar') {
+                if (valor > poupanca.saldoTotal) {
+                    alert('Saldo insuficiente na caixinha.');
+                    return;
+                }
+                poupanca.saldoTotal -= valor;
+                lancamentos.push({
+                    id: Date.now(),
+                    ciclo: cicloEscolhido,
+                    data: dataLanc,
+                    vencimento: dataLanc,
+                    descricao: 'RESGATE CAIXINHA POUPANÇA',
+                    categoria: 'Poupança / Caixinha',
+                    tipo: 'receita',
+                    status: 'Pago',
+                    valor: valor
+                });
+            }
+            inputValor.value = '';
+            salvarDados();
+            renderizarPoupanca();
+            atualizarInterface();
+        };
+
+        window.editarMetaPoupanca = function () {
+            const novaMeta = prompt('Qual o valor da sua meta na Caixinha Poupança (R$)?', poupanca.meta);
+            if (novaMeta !== null && !isNaN(parseFloat(novaMeta)) && parseFloat(novaMeta) > 0) {
+                poupanca.meta = parseFloat(novaMeta);
+                salvarDados();
+                renderizarPoupanca();
+                atualizarInterface();
+            }
+        };
+
+        function garantirProximaParcelaPendente(p, dataReferencia, vencReferencia) {
+            if (p.quitado) return;
+            const jaExistePendente = lancamentos.some(
+                l => l.parceladoId === p.id && l.numeroParcela === p.parcelaAtual && l.status === 'Pendente'
+            );
+            if (jaExistePendente) return;
+
+            const proximaData = somarMesesData(dataReferencia, 1);
+            const proximoVenc = somarMesesData(vencReferencia || dataReferencia, 1);
+            const anoParc = proximaData.split('-')[0];
+            if (!listaAnos.includes(anoParc)) {
+                listaAnos.push(anoParc);
+                renderizarAnos();
+            }
+
+            lancamentos.push({
+                id: Date.now() + Math.floor(Math.random() * 1000),
+                parceladoId: p.id,
+                numeroParcela: p.parcelaAtual,
+                totalParcelas: p.totalParcelas,
+                ciclo: p.ciclo,
+                data: proximaData,
+                vencimento: proximoVenc,
+                descricao: `${p.titulo} (${p.parcelaAtual}/${p.totalParcelas})`,
+                categoria: p.categoria,
+                tipo: 'despesa',
+                status: 'Pendente',
+                valor: p.valorParcela
+            });
+        }
+
+        function criarParceladoComLancamentos({ titulo, categoria, ciclo, valorParcela, parcelaAtual, totalParcelas, dataBase, vencimentoBase, statusInicial }) {
+            const parceladoId = 'parc_' + Date.now();
+            let parcelaExibida = parcelaAtual;
+            let quitado = false;
+
+            if (statusInicial === 'Pago') {
+                if (parcelaAtual >= totalParcelas) {
+                    parcelaExibida = totalParcelas;
+                    quitado = true;
+                } else {
+                    parcelaExibida = parcelaAtual + 1;
+                }
+            }
+
+            const novoParcelado = {
+                id: parceladoId,
+                titulo: titulo,
+                categoria: categoria,
+                ciclo: ciclo,
+                valorParcela: valorParcela,
+                parcelaAtual: parcelaExibida,
+                totalParcelas: totalParcelas,
+                quitado: quitado
+            };
+
+            parcelados.push(novoParcelado);
+
+            const anoParc = dataBase.split('-')[0];
+            if (!listaAnos.includes(anoParc)) {
+                listaAnos.push(anoParc);
+                renderizarAnos();
+            }
+
+            const vencFinal = vencimentoBase || dataBase;
+
+            lancamentos.push({
+                id: Date.now() + 1,
+                parceladoId: parceladoId,
+                numeroParcela: parcelaAtual,
+                totalParcelas: totalParcelas,
+                ciclo: ciclo,
+                data: dataBase,
+                vencimento: vencFinal,
+                descricao: `${titulo} (${parcelaAtual}/${totalParcelas})`,
+                categoria: categoria,
+                tipo: 'despesa',
+                status: statusInicial,
+                valor: valorParcela
+            });
+
+            if (statusInicial === 'Pago' && !quitado) {
+                garantirProximaParcelaPendente(novoParcelado, dataBase, vencFinal);
+            }
+        }
+
+        function obterInfoParcelaItem(item) {
+            if (typeof item.numeroParcela === 'number' && typeof item.totalParcelas === 'number') {
+                return { atual: item.numeroParcela, total: item.totalParcelas };
+            }
+            if (item.parceladoId) {
+                const p = parcelados.find(parc => parc.id === item.parceladoId);
+                if (p) {
+                    const matchDesc = item.descricao.match(/\((\d+)\/(\d+)\)/);
+                    if (matchDesc) {
+                        return { atual: parseInt(matchDesc[1], 10), total: parseInt(matchDesc[2], 10) };
+                    }
+                    return { atual: p.parcelaAtual, total: p.totalParcelas };
+                }
+            }
+            const match = item.descricao.match(/\((\d+)\/(\d+)\)$/);
+            if (match) {
+                return { atual: parseInt(match[1], 10), total: parseInt(match[2], 10) };
+            }
+            return null;
+        }
+
+        function deveContarParcelaContrato(contrato, diaCiclo) {
+            const cobraNosDoisDias = contrato.valorDia05 > 0 && contrato.valorDia20 > 0;
+            const ehCasa = contrato.id === 'casa' || contrato.titulo.toUpperCase() === 'AQUISIÇÃO CASA PROPRIA';
+            return ehCasa
+                ? diaCiclo === 'Dia 05'
+                : (cobraNosDoisDias ? diaCiclo === 'Dia 20' : true);
+        }
+
+        function renderizarContratos() {
+            const grid = document.getElementById('grid-financiamentos');
+            grid.innerHTML = '';
+
+            if (contratos.length === 0) {
+                grid.innerHTML = '<p class="empty-msg" style="grid-column: 1 / -1;">Nenhum financiamento cadastrado. Clique em <strong>+ Novo Financiamento</strong> para adicionar.</p>';
+                return;
+            }
+
+            contratos.forEach(c => {
+                const valorMensalTotal = c.valorDia05 + c.valorDia20;
+                const parcelasRestantes = Math.max(0, c.totalParcelas - c.parcelasPagas);
+                const totalPago = c.parcelasPagas * valorMensalTotal;
+                const saldoDevedor = parcelasRestantes * valorMensalTotal;
+                const percentual = c.totalParcelas > 0
+                    ? Math.min(100, ((c.parcelasPagas / c.totalParcelas) * 100)).toFixed(1)
+                    : '0.0';
+
+                const botoesPagamento = [];
+                if (c.valorDia05 > 0) {
+                    botoesPagamento.push(`<button type="button" class="btn-pay-half" onclick="lancarParteContrato('${c.id}', 'Dia 05')">+ Lançar Dia 05</button>`);
+                }
+                if (c.valorDia20 > 0) {
+                    botoesPagamento.push(`<button type="button" class="btn-pay-half" onclick="lancarParteContrato('${c.id}', 'Dia 20')">+ Lançar Dia 20</button>`);
+                }
+
+                const card = document.createElement('div');
+                card.className = 'fin-card';
+                card.style.borderTop = `3px solid ${c.cor}`;
+
+                card.innerHTML = `
+                    <div class="fin-top">
+                        <div>
+                            <h4>${c.titulo}</h4>
+                            <span class="fin-parcela-valor">${formatarMoeda(valorMensalTotal)} <small>/mês</small></span>
+                        </div>
+                        <div class="action-buttons">
+                            <button type="button" class="btn-edit-small" onclick="abrirModalContrato('${c.id}')">Editar</button>
+                            <button type="button" class="btn-delete" onclick="excluirContrato('${c.id}')" title="Excluir card">✕</button>
+                        </div>
+                    </div>
+                    <div class="fin-split-dates">
+                        <div class="split-pill"><span>Dia 05:</span><strong>${formatarMoeda(c.valorDia05)}</strong></div>
+                        <div class="split-pill"><span>Dia 20:</span><strong>${formatarMoeda(c.valorDia20)}</strong></div>
+                    </div>
+                    <div class="fin-progress-area">
+                        <div class="fin-progress-labels">
+                            <span>Meses: <strong>${c.parcelasPagas}/${c.totalParcelas}</strong></span>
+                            <span>${percentual}% quitado</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill" style="width: ${percentual}%; background-color: ${c.cor}"></div>
+                        </div>
+                    </div>
+                    <div class="fin-stats">
+                        <div class="stat-box"><span>Total Pago</span><strong class="text-green">${formatarMoeda(totalPago)}</strong></div>
+                        <div class="stat-box"><span>Restante (${parcelasRestantes}m)</span><strong class="text-muted">${formatarMoeda(saldoDevedor)}</strong></div>
+                    </div>
+                    ${botoesPagamento.length > 0 ? `<div class="fin-pay-buttons">${botoesPagamento.join('')}</div>` : ''}
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        window.lancarParteContrato = function (id, diaCiclo) {
+            const contrato = contratos.find(c => c.id === id);
+            if (!contrato) return;
+
+            const valorLancar = diaCiclo === 'Dia 05' ? contrato.valorDia05 : contrato.valorDia20;
+            if (valorLancar <= 0) {
+                alert(`O valor para ${diaCiclo} está zerado. Clique em "Editar" para definir.`);
+                return;
+            }
+
+            const anoAtual = filtroAno.value || '2026';
+            const mesAtual = filtroMes.value !== 'TODOS' ? filtroMes.value : '11';
+            const diaNum = diaCiclo === 'Dia 05' ? '05' : '20';
+            const dataLanc = `${anoAtual}-${mesAtual}-${diaNum}`;
+
+            lancamentos.push({
+                id: Date.now(),
+                contratoId: contrato.id,
+                ciclo: diaCiclo,
+                data: dataLanc,
+                vencimento: dataLanc,
+                descricao: contrato.titulo,
+                categoria: contrato.categoria,
+                tipo: 'despesa',
+                status: 'Pendente',
+                valor: valorLancar
+            });
+
+            salvarDados();
+            atualizarInterface();
+        };
+
+        window.abrirModalNovoContrato = function () {
+            document.getElementById('modal-titulo').textContent = 'Novo Financiamento / Contrato';
+            document.getElementById('contrato-id').value = '';
+            document.getElementById('contrato-nome').value = '';
+            document.getElementById('contrato-categoria').value = 'Empréstimos / Dívidas';
+            document.getElementById('contrato-cor').value = '#3b82f6';
+            document.getElementById('contrato-valor-05').value = '0';
+            document.getElementById('contrato-valor-20').value = '0';
+            document.getElementById('contrato-pagas').value = '0';
+            document.getElementById('contrato-total').value = '12';
+            document.getElementById('modal-contrato').classList.remove('hidden');
+        };
+
+        window.abrirModalContrato = function (id) {
+            const c = contratos.find(item => item.id === id);
+            if (!c) return;
+            document.getElementById('modal-titulo').textContent = `Configurar: ${c.titulo}`;
+            document.getElementById('contrato-id').value = c.id;
+            document.getElementById('contrato-nome').value = c.titulo;
+            document.getElementById('contrato-categoria').value = c.categoria;
+            document.getElementById('contrato-cor').value = c.cor || '#3b82f6';
+            document.getElementById('contrato-valor-05').value = c.valorDia05;
+            document.getElementById('contrato-valor-20').value = c.valorDia20;
+            document.getElementById('contrato-pagas').value = c.parcelasPagas;
+            document.getElementById('contrato-total').value = c.totalParcelas;
+            document.getElementById('modal-contrato').classList.remove('hidden');
+        };
+
+        window.excluirContrato = function (id) {
+            const c = contratos.find(item => item.id === id);
+            if (!c) return;
+            if (!confirm(`Remover o card "${c.titulo}"? Os lançamentos já registrados no cronograma serão mantidos.`)) return;
+            contratos = contratos.filter(item => item.id !== id);
+            salvarDados();
+            renderizarContratos();
+        };
+
+        window.fecharModal = function () {
+            document.getElementById('modal-contrato').classList.add('hidden');
+        };
+
+        document.getElementById('form-contrato').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const id = document.getElementById('contrato-id').value;
+            const titulo = document.getElementById('contrato-nome').value.trim().toUpperCase();
+            const categoria = document.getElementById('contrato-categoria').value;
+            const cor = document.getElementById('contrato-cor').value;
+            const valorDia05 = parseFloat(document.getElementById('contrato-valor-05').value) || 0;
+            const valorDia20 = parseFloat(document.getElementById('contrato-valor-20').value) || 0;
+            const parcelasPagas = parseInt(document.getElementById('contrato-pagas').value, 10) || 0;
+            const totalParcelas = parseInt(document.getElementById('contrato-total').value, 10) || 1;
+
+            if (parcelasPagas > totalParcelas) {
+                alert('A quantidade de parcelas pagas não pode ser maior que o total de parcelas.');
+                return;
+            }
+
+            if (titulo && !listaDescricoes.includes(titulo)) {
+                listaDescricoes.push(titulo);
+                renderizarListaDescricoes();
+            }
+
+            let contratoAlvo = null;
+
+            if (id) {
+                const c = contratos.find(item => item.id === id);
+                if (c) {
+                    const tituloAntigo = c.titulo.toUpperCase();
+                    c.titulo = titulo;
+                    c.categoria = categoria;
+                    c.cor = cor;
+                    c.valorDia05 = valorDia05;
+                    c.valorDia20 = valorDia20;
+                    c.parcelasPagas = parcelasPagas;
+                    c.totalParcelas = totalParcelas;
+                    contratoAlvo = c;
+
+                    lancamentos.forEach(l => {
+                        const ehDoContrato = l.contratoId === c.id || l.descricao.toUpperCase() === tituloAntigo;
+                        if (ehDoContrato) {
+                            l.contratoId = c.id;
+                            l.descricao = titulo;
+                            l.categoria = categoria;
+                            if (l.status === 'Pendente') {
+                                if (l.ciclo === 'Dia 05' && valorDia05 > 0) l.valor = valorDia05;
+                                if (l.ciclo === 'Dia 20' && valorDia20 > 0) l.valor = valorDia20;
+                            }
+                        }
+                    });
+                }
+            } else {
+                contratoAlvo = {
+                    id: 'contrato_' + Date.now(),
+                    titulo: titulo,
+                    categoria: categoria,
+                    cor: cor,
+                    valorDia05: valorDia05,
+                    valorDia20: valorDia20,
+                    parcelasPagas: parcelasPagas,
+                    totalParcelas: totalParcelas
+                };
+                contratos.push(contratoAlvo);
+            }
+
+            if (contratoAlvo) {
+                const anoAtual = filtroAno.value || '2026';
+                const mesAtual = filtroMes.value !== 'TODOS' ? filtroMes.value : '11';
+
+                if (valorDia05 > 0) {
+                    const jaExiste05 = lancamentos.some(l =>
+                        (l.contratoId === contratoAlvo.id || l.descricao.toUpperCase() === titulo) &&
+                        l.ciclo === 'Dia 05' &&
+                        l.data.startsWith(`${anoAtual}-${mesAtual}`)
+                    );
+                    if (!jaExiste05) {
+                        const data05 = `${anoAtual}-${mesAtual}-05`;
+                        lancamentos.push({
+                            id: Date.now() + 10,
+                            contratoId: contratoAlvo.id,
+                            ciclo: 'Dia 05',
+                            data: data05,
+                            vencimento: data05,
+                            descricao: titulo,
+                            categoria: categoria,
+                            tipo: 'despesa',
+                            status: 'Pendente',
+                            valor: valorDia05
+                        });
+                    }
+                }
+
+                if (valorDia20 > 0) {
+                    const jaExiste20 = lancamentos.some(l =>
+                        (l.contratoId === contratoAlvo.id || l.descricao.toUpperCase() === titulo) &&
+                        l.ciclo === 'Dia 20' &&
+                        l.data.startsWith(`${anoAtual}-${mesAtual}`)
+                    );
+                    if (!jaExiste20) {
+                        const data20 = `${anoAtual}-${mesAtual}-20`;
+                        lancamentos.push({
+                            id: Date.now() + 20,
+                            contratoId: contratoAlvo.id,
+                            ciclo: 'Dia 20',
+                            data: data20,
+                            vencimento: data20,
+                            descricao: titulo,
+                            categoria: categoria,
+                            tipo: 'despesa',
+                            status: 'Pendente',
+                            valor: valorDia20
+                        });
+                    }
+                }
+            }
+
+            salvarDados();
+            renderizarContratos();
+            atualizarInterface();
+            fecharModal();
+        });
+
+        function atualizarGraficoQuinzena(sufixo, recPago, recPendente, despPaga, despPendente) {
+            const totalReceita = recPago + recPendente;
+            const totalDespesa = despPaga + despPendente;
+
+            const pctRecPago = totalReceita > 0 ? Math.round((recPago / totalReceita) * 100) : 0;
+            const pctDespPaga = totalDespesa > 0 ? Math.round((despPaga / totalDespesa) * 100) : 0;
+            const pctDespPend = totalDespesa > 0 ? Math.round((despPendente / totalDespesa) * 100) : 0;
+
+            document.getElementById(`qbar-rec-${sufixo}`).style.height = `${pctRecPago}%`;
+            document.getElementById(`qpct-rec-${sufixo}`).textContent = `${pctRecPago}%`;
+
+            document.getElementById(`qbar-desp-${sufixo}`).style.height = `${pctDespPaga}%`;
+            document.getElementById(`qpct-desp-${sufixo}`).textContent = `${pctDespPaga}%`;
+
+            document.getElementById(`qbar-pend-${sufixo}`).style.height = `${pctDespPend}%`;
+            document.getElementById(`qpct-pend-${sufixo}`).textContent = `${pctDespPend}%`;
+        }
+
+        function atualizarInterface() {
+            const anoSelecionado = filtroAno.value;
+            const mesSelecionado = filtroMes.value;
+            const cicloSelecionado = filtroCiclo.value;
+            const descSelecionada = filtroDescricao.value;
+            const termoBusca = campoBusca.value.trim().toLowerCase();
+
+            const doPeriodo = lancamentos.filter(item => {
+                const [anoItem, mesItem] = item.data.split('-');
+                const bateAno = anoItem === anoSelecionado;
+                const bateMes = mesSelecionado === 'TODOS' || mesItem === mesSelecionado;
+                return bateAno && bateMes;
+            });
+
+            let receitas = 0, despesas = 0, pendentes = 0;
+            let recTotal05 = 0, recPago05 = 0, recPend05 = 0;
+            let despTotal05 = 0, despPaga05 = 0, despPend05 = 0;
+            let recTotal20 = 0, recPago20 = 0, recPend20 = 0;
+            let despTotal20 = 0, despPaga20 = 0, despPend20 = 0;
+            const gastosPorCategoria = {};
+
+            doPeriodo.forEach(item => {
+                if (item.tipo === 'receita') {
+                    receitas += item.valor;
+                    if (item.ciclo === 'Dia 05') {
+                        recTotal05 += item.valor;
+                        if (item.status === 'Pago') recPago05 += item.valor;
+                        else recPend05 += item.valor;
+                    }
+                    if (item.ciclo === 'Dia 20') {
+                        recTotal20 += item.valor;
+                        if (item.status === 'Pago') recPago20 += item.valor;
+                        else recPend20 += item.valor;
+                    }
+                } else {
+                    despesas += item.valor;
+                    if (item.status === 'Pendente') pendentes += item.valor;
+                    if (item.ciclo === 'Dia 05') {
+                        despTotal05 += item.valor;
+                        if (item.status === 'Pago') despPaga05 += item.valor;
+                        else despPend05 += item.valor;
+                    }
+                    if (item.ciclo === 'Dia 20') {
+                        despTotal20 += item.valor;
+                        if (item.status === 'Pago') despPaga20 += item.valor;
+                        else despPend20 += item.valor;
+                    }
+                    gastosPorCategoria[item.categoria] = (gastosPorCategoria[item.categoria] || 0) + item.valor;
+                }
+            });
+
+            const saldo = receitas - despesas;
+            document.getElementById('total-receitas').textContent = formatarMoeda(receitas);
+            document.getElementById('total-despesas').textContent = formatarMoeda(despesas);
+            document.getElementById('total-pendente').textContent = formatarMoeda(pendentes);
+
+            const elSaldo = document.getElementById('saldo-atual');
+            elSaldo.textContent = formatarMoeda(saldo);
+            elSaldo.style.color = saldo >= 0 ? '#34d399' : '#fb7185';
+
+            const tetoReferencia = Math.max(receitas, despesas, pendentes, 1);
+            document.getElementById('bar-receitas').style.width = `${receitas > 0 ? Math.min(100, (receitas / tetoReferencia) * 100) : 0}%`;
+            document.getElementById('bar-despesas').style.width = `${despesas > 0 ? Math.min(100, (despesas / tetoReferencia) * 100) : 0}%`;
+
+            const pctSaldo = receitas > 0 ? Math.min(100, (Math.abs(saldo) / receitas) * 100) : (saldo !== 0 ? 100 : 0);
+            const elBarSaldo = document.getElementById('bar-saldo');
+            elBarSaldo.style.width = `${pctSaldo}%`;
+            elBarSaldo.style.background = saldo >= 0 ? '#3b82f6' : '#f43f5e';
+
+            document.getElementById('bar-pendente').style.width = `${despesas > 0 ? Math.min(100, (pendentes / despesas) * 100) : 0}%`;
+
+            document.getElementById('rec-05').textContent = formatarMoeda(recTotal05);
+            document.getElementById('desp-05').textContent = formatarMoeda(despTotal05);
+            document.getElementById('pend-05').textContent = formatarMoeda(despPend05);
+            const saldo05 = recTotal05 - despTotal05;
+            const elSaldo05 = document.getElementById('saldo-05');
+            elSaldo05.textContent = `Sobra: ${formatarMoeda(saldo05)}`;
+            elSaldo05.style.color = saldo05 >= 0 ? '#34d399' : '#fb7185';
+            atualizarGraficoQuinzena('05', recPago05, recPend05, despPaga05, despPend05);
+
+            document.getElementById('rec-20').textContent = formatarMoeda(recTotal20);
+            document.getElementById('desp-20').textContent = formatarMoeda(despTotal20);
+            document.getElementById('pend-20').textContent = formatarMoeda(despPend20);
+            const saldo20 = recTotal20 - despTotal20;
+            const elSaldo20 = document.getElementById('saldo-20');
+            elSaldo20.textContent = `Sobra: ${formatarMoeda(saldo20)}`;
+            elSaldo20.style.color = saldo20 >= 0 ? '#34d399' : '#fb7185';
+            atualizarGraficoQuinzena('20', recPago20, recPend20, despPaga20, despPend20);
+
+            atualizarSugestaoPoupanca(doPeriodo);
+
+            const filtradosTabela = doPeriodo.filter(item => {
+                const bateCiclo = cicloSelecionado === 'TODOS' || item.ciclo === cicloSelecionado;
+                const bateDesc = descSelecionada === 'TODAS' ||
+                    item.descricao === descSelecionada ||
+                    item.descricao.startsWith(`${descSelecionada} (`);
+                const bateBusca = !termoBusca ||
+                    item.descricao.toLowerCase().includes(termoBusca) ||
+                    item.categoria.toLowerCase().includes(termoBusca);
+                return bateCiclo && bateDesc && bateBusca;
+            });
+
+            filtradosTabela.sort((a, b) => new Date(a.data) - new Date(b.data) || a.ciclo.localeCompare(b.ciclo));
+
+            tabelaCorpo.innerHTML = '';
+            if (filtradosTabela.length === 0) {
+                tabelaCorpo.innerHTML = `<tr><td colspan="8" class="empty-msg">Nenhum lançamento encontrado em ${anoSelecionado}.</td></tr>`;
+            } else {
+                filtradosTabela.forEach(item => {
+                    const tr = document.createElement('tr');
+                    const emEdicao = idValorEditando === item.id;
+                    const vencido = estaVencidoPendente(item);
+
+                    const classesLinha = [];
+                    if (emEdicao) classesLinha.push('row-editing');
+                    if (vencido) classesLinha.push('row-vencida');
+                    if (classesLinha.length > 0) tr.className = classesLinha.join(' ');
+
+                    const classeValor = item.tipo === 'receita' ? 'valor-positivo' : 'valor-negativo';
+                    const sinal = item.tipo === 'receita' ? '+' : '-';
+                    const classeStatus = item.status === 'Pago' ? 'badge-pago' : 'badge-pendente';
+                    const classeCiclo = item.ciclo === 'Dia 05' ? 'ciclo-05' : 'ciclo-20';
+                    const cicloCurto = item.ciclo === 'Dia 05' ? '05' : '20';
+
+                    const dataVenc = item.vencimento || item.data;
+                    const vencHtml = `<span class="${vencido ? 'venc-atrasado' : ''}">${formatarDataCurta(dataVenc)}${vencido ? ' !' : ''}</span>`;
+
+                    const infoParc = obterInfoParcelaItem(item);
+                    const badgeParcelaHtml = infoParc
+                        ? `<span class="parc-inline-badge ${infoParc.atual >= infoParc.total && item.status === 'Pago' ? 'quitado' : ''}" title="Parcela ${infoParc.atual} de ${infoParc.total}">${infoParc.atual}/${infoParc.total}</span>`
+                        : '';
+
+                    const celulaValor = emEdicao
+                        ? `<div class="inline-valor-box">
+                               <input type="number" id="input-valor-${item.id}" class="inline-valor-input"
+                                   inputmode="decimal" step="0.01" min="0.01" value="${item.valor.toFixed(2)}"
+                                   onkeydown="teclaEdicaoValor(event, ${item.id})">
+                               <button type="button" class="btn-save-inline" onclick="salvarValorInline(${item.id})" title="Salvar valor">✓</button>
+                               <button type="button" class="btn-cancel-val" onclick="cancelarValorInline()" title="Cancelar">✕</button>
+                           </div>`
+                        : `<span class="${classeValor}">${sinal} ${formatarMoeda(item.valor)}</span>`;
+
+                    tr.innerHTML = `
+                        <td><span class="ciclo-tag ${classeCiclo}">${cicloCurto}</span></td>
+                        <td class="col-data">${formatarDataCurta(item.data)}</td>
+                        <td class="col-data col-venc">${vencHtml}</td>
+                        <td class="col-desc">
+                            <strong>${item.descricao}</strong>
+                            <span class="sub-cat-mobile">
+                                <span>${item.categoria}</span>
+                                ${badgeParcelaHtml}
+                            </span>
+                        </td>
+                        <td class="col-categoria">
+                            <div class="cat-parcela-wrap">
+                                <span class="cat-tag">${item.categoria}</span>
+                                ${badgeParcelaHtml}
+                            </div>
+                        </td>
+                        <td><button type="button" class="badge ${classeStatus}" onclick="alternarStatus(${item.id})">${item.status}</button></td>
+                        <td>${celulaValor}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button type="button" class="btn-edit-row" onclick="editarApenasValor(${item.id})" title="Editar valor">✎</button>
+                                <button type="button" class="btn-delete" onclick="removerLancamento(${item.id})" title="Excluir lançamento">✕</button>
+                            </div>
+                        </td>
+                    `;
+                    tabelaCorpo.appendChild(tr);
+                });
+
+                if (idValorEditando !== null) {
+                    const inputAtivo = document.getElementById(`input-valor-${idValorEditando}`);
+                    if (inputAtivo) {
+                        inputAtivo.focus();
+                        inputAtivo.select();
+                    }
+                }
+            }
+
+            renderizarGrafico(gastosPorCategoria, despesas);
+        }
+
+        window.editarApenasValor = function (id) {
+            idValorEditando = id;
+            atualizarInterface();
+        };
+
+        window.cancelarValorInline = function () {
+            idValorEditando = null;
+            atualizarInterface();
+        };
+
+        window.teclaEdicaoValor = function (e, id) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                salvarValorInline(id);
+            } else if (e.key === 'Escape') {
+                cancelarValorInline();
+            }
+        };
+
+        window.salvarValorInline = function (id) {
+            const input = document.getElementById(`input-valor-${id}`);
+            if (!input) return;
+            const novoValor = parseFloat(input.value);
+            if (!novoValor || novoValor <= 0) {
+                input.focus();
+                return;
+            }
+
+            const item = lancamentos.find(l => l.id === id);
+            if (item) {
+                if (item.categoria === 'Poupança / Caixinha') {
+                    if (item.tipo === 'despesa') poupanca.saldoTotal = Math.max(0, poupanca.saldoTotal - item.valor + novoValor);
+                    if (item.tipo === 'receita') poupanca.saldoTotal = Math.max(0, poupanca.saldoTotal + item.valor - novoValor);
+                    renderizarPoupanca();
+                }
+                item.valor = novoValor;
+            }
+
+            idValorEditando = null;
+            salvarDados();
+            atualizarInterface();
+        };
+
+        function renderizarGrafico(categoriasObj, totalDespesas) {
+            const container = document.getElementById('grafico-categorias');
+            container.innerHTML = '';
+            const entries = Object.entries(categoriasObj).sort((a, b) => b[1] - a[1]);
+
+            if (entries.length === 0) {
+                container.innerHTML = '<p class="empty-msg">Sem saídas registradas no período.</p>';
+                return;
+            }
+
+            entries.forEach(([categoria, valor]) => {
+                const percentual = totalDespesas > 0 ? ((valor / totalDespesas) * 100).toFixed(1) : 0;
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'bar-item';
+                itemDiv.innerHTML = `
+                    <div class="bar-info">
+                        <span>${categoria}</span>
+                        <span>${formatarMoeda(valor)} (${percentual}%)</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill" style="width: ${percentual}%"></div>
+                    </div>
+                `;
+                container.appendChild(itemDiv);
+            });
+        }
+
+        document.getElementById('ciclo').addEventListener('change', sincronizarDataFormulario);
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const ciclo = document.getElementById('ciclo').value;
+            const data = document.getElementById('data').value;
+            const vencimentoDigitado = document.getElementById('vencimento').value || data;
+            const descricaoDigitada = inputDescricao.value.trim().toUpperCase();
+            const categoria = document.getElementById('categoria').value;
+            const tipo = document.getElementById('tipo').value;
+            const status = document.getElementById('status').value;
+            const valor = parseFloat(document.getElementById('valor').value);
+            const modoParcela = document.getElementById('modo-parcela').value;
+
+            const [anoLancamento, mesLancamento] = data.split('-');
+            if (anoLancamento && !listaAnos.includes(anoLancamento)) {
+                listaAnos.push(anoLancamento);
+                anoAtivo = anoLancamento;
+                renderizarAnos();
+            }
+
+            if (descricaoDigitada && !listaDescricoes.includes(descricaoDigitada)) {
+                listaDescricoes.push(descricaoDigitada);
+                renderizarListaDescricoes();
+            }
+
+            if (tipo === 'despesa' && modoParcela === 'parcelado') {
+                const parcelaAtual = parseInt(document.getElementById('parcela-atual').value, 10) || 1;
+                const totalParcelas = parseInt(document.getElementById('parcelas-total').value, 10) || 10;
+
+                if (parcelaAtual > totalParcelas) {
+                    alert('A parcela atual não pode ser maior que o total de parcelas.');
+                    return;
+                }
+
+                criarParceladoComLancamentos({
+                    titulo: descricaoDigitada,
+                    categoria: categoria,
+                    ciclo: ciclo,
+                    valorParcela: valor,
+                    parcelaAtual: parcelaAtual,
+                    totalParcelas: totalParcelas,
+                    dataBase: data,
+                    vencimentoBase: vencimentoDigitado,
+                    statusInicial: status
+                });
+            } else {
+                if (categoria === 'Poupança / Caixinha') {
+                    if (tipo === 'despesa') poupanca.saldoTotal += valor;
+                    if (tipo === 'receita') poupanca.saldoTotal = Math.max(0, poupanca.saldoTotal - valor);
+                    renderizarPoupanca();
+                }
+
+                const contratoVinculado = contratos.find(c => c.titulo.toUpperCase() === descricaoDigitada);
+                if (contratoVinculado && tipo === 'despesa' && status === 'Pago') {
+                    if (deveContarParcelaContrato(contratoVinculado, ciclo)) {
+                        contratoVinculado.parcelasPagas = Math.min(contratoVinculado.totalParcelas, contratoVinculado.parcelasPagas + 1);
+                        renderizarContratos();
+                    }
+                }
+
+                lancamentos.push({
+                    id: Date.now() + Math.floor(Math.random() * 100),
+                    contratoId: contratoVinculado ? contratoVinculado.id : undefined,
+                    ciclo: ciclo,
+                    data: data,
+                    vencimento: vencimentoDigitado,
+                    descricao: descricaoDigitada,
+                    categoria: categoria,
+                    tipo: tipo,
+                    status: status,
+                    valor: valor
+                });
+            }
+
+            if (anoLancamento) {
+                anoAtivo = anoLancamento;
+                filtroAno.value = anoLancamento;
+                atualizarTitulosAno();
+            }
+            if (mesLancamento && filtroMes.value !== 'TODOS' && filtroMes.value !== mesLancamento) {
+                filtroMes.value = mesLancamento;
+            }
+            if (filtroCiclo.value !== 'TODOS' && filtroCiclo.value !== ciclo) {
+                filtroCiclo.value = 'TODOS';
+            }
+            if (filtroDescricao.value !== 'TODAS') {
+                filtroDescricao.value = 'TODAS';
+            }
+            if (campoBusca.value.trim() !== '') {
+                campoBusca.value = '';
+            }
+
+            salvarDados();
+            atualizarInterface();
+
+            inputDescricao.value = '';
+            document.getElementById('valor').value = '';
+            document.getElementById('modo-parcela').value = 'avista';
+            atualizarVisibilidadeParcelamento();
+        });
+
+        window.removerLancamento = function (id) {
+            if (idValorEditando === id) idValorEditando = null;
+            const item = lancamentos.find(i => i.id === id);
+            lancamentos = lancamentos.filter(i => i.id !== id);
+
+            if (item) {
+                if (item.categoria === 'Poupança / Caixinha') {
+                    if (item.tipo === 'despesa') poupanca.saldoTotal = Math.max(0, poupanca.saldoTotal - item.valor);
+                    if (item.tipo === 'receita') poupanca.saldoTotal += item.valor;
+                    renderizarPoupanca();
+                }
+                if (item.parceladoId && item.status === 'Pago') {
+                    const p = parcelados.find(parc => parc.id === item.parceladoId);
+                    if (p) {
+                        p.quitado = false;
+                        p.parcelaAtual = Math.max(1, p.parcelaAtual - 1);
+                    }
+                }
+                if (item.tipo === 'despesa' && item.status === 'Pago') {
+                    const contratoVinculado = contratos.find(c =>
+                        item.contratoId === c.id || item.descricao.toUpperCase() === c.titulo.toUpperCase()
+                    );
+                    if (contratoVinculado && deveContarParcelaContrato(contratoVinculado, item.ciclo)) {
+                        contratoVinculado.parcelasPagas = Math.max(0, contratoVinculado.parcelasPagas - 1);
+                        renderizarContratos();
+                    }
+                }
+            }
+
+            atualizarInterface();
+            salvarDados();
+        };
+
+        window.alternarStatus = function (id) {
+            const item = lancamentos.find(l => l.id === id);
+            if (!item) return;
+
+            const statusAnterior = item.status;
+            const novoStatus = statusAnterior === 'Pago' ? 'Pendente' : 'Pago';
+            item.status = novoStatus;
+
+            if (item.parceladoId) {
+                const p = parcelados.find(parc => parc.id === item.parceladoId);
+                if (p) {
+                    if (statusAnterior === 'Pendente' && novoStatus === 'Pago') {
+                        if (p.parcelaAtual >= p.totalParcelas) {
+                            p.parcelaAtual = p.totalParcelas;
+                            p.quitado = true;
+                        } else {
+                            p.parcelaAtual += 1;
+                            garantirProximaParcelaPendente(p, item.data, item.vencimento);
+                        }
+                    } else if (statusAnterior === 'Pago' && novoStatus === 'Pendente') {
+                        if (p.quitado) {
+                            p.quitado = false;
+                        } else {
+                            lancamentos = lancamentos.filter(l => !(l.parceladoId === p.id && l.numeroParcela === p.parcelaAtual && l.status === 'Pendente'));
+                            p.parcelaAtual = Math.max(1, p.parcelaAtual - 1);
+                        }
+                    }
+                }
+            }
+
+            const contratoVinculado = contratos.find(c =>
+                item.contratoId === c.id || item.descricao.toUpperCase() === c.titulo.toUpperCase()
+            );
+            if (contratoVinculado && item.tipo === 'despesa') {
+                if (deveContarParcelaContrato(contratoVinculado, item.ciclo)) {
+                    if (statusAnterior === 'Pendente' && novoStatus === 'Pago') {
+                        contratoVinculado.parcelasPagas = Math.min(contratoVinculado.totalParcelas, contratoVinculado.parcelasPagas + 1);
+                    } else if (statusAnterior === 'Pago' && novoStatus === 'Pendente') {
+                        contratoVinculado.parcelasPagas = Math.max(0, contratoVinculado.parcelasPagas - 1);
+                    }
+                    renderizarContratos();
+                }
+            }
+
+            atualizarInterface();
+            salvarDados();
+        };
+
+        filtroAno.addEventListener('change', () => {
+            anoAtivo = filtroAno.value;
+            salvarDados();
+            atualizarTitulosAno();
+            sincronizarDataFormulario();
+            atualizarInterface();
+        });
+
+        filtroMes.addEventListener('change', () => {
+            sincronizarDataFormulario();
+            atualizarInterface();
+        });
+        filtroCiclo.addEventListener('change', atualizarInterface);
+        filtroDescricao.addEventListener('change', atualizarInterface);
+        campoBusca.addEventListener('input', atualizarInterface);
+
+        document.getElementById('btn-limpar').addEventListener('click', () => {
+            if (confirm('Deseja zerar todos os lançamentos, os débitos parcelados e a Caixinha?')) {
+                lancamentos = [];
+                parcelados = [];
+                poupanca.saldoTotal = 0.00;
+                idValorEditando = null;
+                atualizarInterface();
+                renderizarPoupanca();
+                salvarDados();
+            }
+        });
+
+        document.getElementById('btn-exportar').addEventListener('click', () => {
+            const ano = filtroAno.value;
+            let csv = 'Ano;Ciclo_Pagamento;Data;Vencimento;Descricao;Categoria;Tipo;Status;Valor\n';
+            lancamentos.forEach(l => {
+                const anoL = l.data.split('-')[0];
+                csv += `${anoL};${l.ciclo};${l.data};${l.vencimento || l.data};${l.descricao};${l.categoria};${l.tipo};${l.status};${l.valor.toFixed(2).replace('.', ',')}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `Controle_Gastos_${ano}_Completo.csv`;
+            link.click();
+        });
+
+        window.abrirModalCopiarMes = function () {
+            const anoAtual = filtroAno.value || '2026';
+            const mesAtualFiltro = filtroMes.value !== 'TODOS' ? filtroMes.value : '11';
+
+            let anoDestinoSugerido = anoAtual;
+            let proximoMesNum = parseInt(mesAtualFiltro, 10) + 1;
+            if (proximoMesNum > 12) {
+                proximoMesNum = 1;
+                anoDestinoSugerido = String(Number(anoAtual) + 1);
+                if (!listaAnos.includes(anoDestinoSugerido)) {
+                    listaAnos.push(anoDestinoSugerido);
+                    renderizarAnos();
+                }
+            }
+            const proximoMesStr = String(proximoMesNum).padStart(2, '0');
+
+            document.getElementById('copia-ano-origem').value = anoAtual;
+            document.getElementById('copia-mes-origem').value = mesAtualFiltro;
+            document.getElementById('copia-ano-destino').value = anoDestinoSugerido;
+            document.getElementById('copia-mes-destino').value = proximoMesStr;
+            document.getElementById('modal-copiar-mes').classList.remove('hidden');
+        };
+
+        window.fecharModalCopiarMes = function () {
+            document.getElementById('modal-copiar-mes').classList.add('hidden');
+        };
+
+        document.getElementById('form-copiar-mes').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const anoOrigem = document.getElementById('copia-ano-origem').value;
+            const mesOrigem = document.getElementById('copia-mes-origem').value;
+            const anoDestino = document.getElementById('copia-ano-destino').value;
+            const mesDestino = document.getElementById('copia-mes-destino').value;
+            const cicloAlvo = document.getElementById('copia-ciclo').value;
+            const statusModo = document.getElementById('copia-status').value;
+
+            if (anoOrigem === anoDestino && mesOrigem === mesDestino) {
+                alert('Selecione um mês/ano de destino diferente da origem.');
+                return;
+            }
+
+            const itensParaCopiar = lancamentos.filter(item => {
+                const [anoItem, mesItem] = item.data.split('-');
+                const bateAno = anoItem === anoOrigem;
+                const bateMes = mesItem === mesOrigem;
+                const bateCiclo = cicloAlvo === 'TODOS' || item.ciclo === cicloAlvo;
+                const naoEhMovPoupanca = item.categoria !== 'Poupança / Caixinha';
+                return bateAno && bateMes && bateCiclo && naoEhMovPoupanca;
+            });
+
+            if (itensParaCopiar.length === 0) {
+                alert(`Nenhum lançamento encontrado em ${mesOrigem}/${anoOrigem}.`);
+                return;
+            }
+
+            const ultimoDiaMesDestino = new Date(Number(anoDestino), parseInt(mesDestino, 10), 0).getDate();
+            let contadorBase = Date.now();
+            const novosLancamentos = [];
+
+            itensParaCopiar.forEach((item, idx) => {
+                const [, , diaOriginal] = item.data.split('-');
+                const diaAjustado = String(Math.min(parseInt(diaOriginal, 10), ultimoDiaMesDestino)).padStart(2, '0');
+                const novaData = `${anoDestino}-${mesDestino}-${diaAjustado}`;
+
+                const vencBase = item.vencimento || item.data;
+                const [, , diaVencOriginal] = vencBase.split('-');
+                const diaVencAjustado = String(Math.min(parseInt(diaVencOriginal, 10), ultimoDiaMesDestino)).padStart(2, '0');
+                const novoVencimento = `${anoDestino}-${mesDestino}-${diaVencAjustado}`;
+
+                if (item.parceladoId && typeof item.numeroParcela === 'number' && typeof item.totalParcelas === 'number') {
+                    if (item.numeroParcela >= item.totalParcelas) return;
+
+                    const proximaParcela = item.numeroParcela + 1;
+                    const jaExiste = lancamentos.some(
+                        l => l.parceladoId === item.parceladoId && l.numeroParcela === proximaParcela
+                    );
+                    if (jaExiste) return;
+
+                    const tituloBase = item.descricao.replace(/\s*\(\d+\/\d+\)$/, '');
+                    novosLancamentos.push({
+                        ...item,
+                        id: contadorBase + idx,
+                        data: novaData,
+                        vencimento: novoVencimento,
+                        numeroParcela: proximaParcela,
+                        descricao: `${tituloBase} (${proximaParcela}/${item.totalParcelas})`,
+                        status: statusModo === 'MANTER' ? item.status : 'Pendente'
+                    });
+                } else {
+                    const statusFinal = statusModo === 'MANTER' ? item.status : 'Pendente';
+                    novosLancamentos.push({
+                        ...item,
+                        id: contadorBase + idx,
+                        data: novaData,
+                        vencimento: novoVencimento,
+                        status: statusFinal
+                    });
+
+                    if (statusFinal === 'Pago' && item.tipo === 'despesa') {
+                        const contratoVinculado = contratos.find(c =>
+                            item.contratoId === c.id || item.descricao.toUpperCase() === c.titulo.toUpperCase()
+                        );
+                        if (contratoVinculado && deveContarParcelaContrato(contratoVinculado, item.ciclo)) {
+                            contratoVinculado.parcelasPagas = Math.min(contratoVinculado.totalParcelas, contratoVinculado.parcelasPagas + 1);
+                        }
+                    }
+                }
+            });
+
+            if (novosLancamentos.length === 0) {
+                alert(`As parcelas de ${mesOrigem}/${anoOrigem} já foram geradas no destino ou já foram quitadas.`);
+                return;
+            }
+
+            lancamentos.push(...novosLancamentos);
+            anoAtivo = anoDestino;
+            salvarDados();
+            renderizarAnos();
+            renderizarContratos();
+            fecharModalCopiarMes();
+
+            filtroAno.value = anoDestino;
+            filtroMes.value = mesDestino;
+            atualizarTitulosAno();
+            sincronizarDataFormulario();
+            atualizarInterface();
+        });
+
+        atualizarBadgeBanco({ online: navigator.onLine });
+        renderizarListaDescricoes();
+        renderizarPoupanca();
+        renderizarContratos();
+        atualizarInterface();
+        carregarDoBanco(true);
+    </script>
+</body>
+
+</html>
